@@ -16,23 +16,26 @@ export default function Home() {
         </p>
 
         {/* Input Method Cards */}
+
         <div className="flex flex-col sm:flex-row justify-center gap-10">
           {/* Upload Image Card */}
-          <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded-lg w-80 h-80 cursor-pointer hover:shadow-lg hover:-translate-y-2 transition">
-            <Image
-              src="/upload.png"
-              width={100}
-              height={100}
-              alt="Upload CTG waveform"
-              className="mb-4"
-            />
-            <p className="font-semibold text-xl text-gray-900 mb-2 text-center">
-              Upload Images of Waveform
-            </p>
-            <p className="text-center text-gray-700">
-              Upload CTG waveform images for automated processing.
-            </p>
-          </div>
+          <Link href="/upload">
+            <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded-lg w-80 h-80 cursor-pointer hover:shadow-lg hover:-translate-y-2 transition">
+              <Image
+                src="/upload.png"
+                width={100}
+                height={100}
+                alt="Upload CTG waveform"
+                className="mb-4"
+              />
+              <p className="font-semibold text-xl text-gray-900 mb-2 text-center">
+                Upload Images of Waveform
+              </p>
+              <p className="text-center text-gray-700">
+                Upload CTG waveform images for automated processing.
+              </p>
+            </div>
+          </Link>
 
           {/* Manual Entry Card */}
           <Link href="/manual">

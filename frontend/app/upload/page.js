@@ -69,14 +69,14 @@ function ImageUploadPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-lg w-full">
+      <div className="bg-white shadow-lg rounded-lg p-6 h-2/3 w-3/4">
         <h2 className="text-2xl font-semibold text-center text-purple-700 mb-4">
           Upload CTG Waveform Image
         </h2>
 
         <div className="flex flex-col items-center">
           {preview ? (
-            <div className="w-64 h-64 border rounded-lg overflow-hidden shadow-md">
+            <div className="w-fit h-64 border rounded-lg overflow-hidden shadow-md">
               <img
                 src={preview}
                 alt="Preview"
@@ -86,7 +86,7 @@ function ImageUploadPage() {
           ) : (
             <label
               htmlFor="file-input"
-              className="w-64 h-64 border-2 border-dashed border-purple-400 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-purple-50 transition p-4"
+              className="w-3/4 h-64 border-2 border-dashed border-purple-400 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-purple-50 transition p-4"
             >
               <p className="text-gray-500 text-sm">
                 Click to select or drag an image here

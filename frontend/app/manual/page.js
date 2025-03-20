@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 function ManualEntryPage() {
   const router = useRouter();
@@ -37,21 +38,38 @@ function ManualEntryPage() {
   );
 
   const [formData, setFormData] = useState(initialFormState);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = () => {
-    const baselineValue =
-      parseFloat(formData["Baseline value (SisPorto)"]) || 0;
-    router.push(`/results?baseline=${baselineValue}`);
-  };
-
-  // Check if all fields are filled
-  const isFormComplete = Object.values(formData).every(
-    (value) => value.trim() !== ""
+  const allFieldsFilled = Object.values(formData).every(
+    (val) => val.trim() !== ""
   );
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const baseline = parseFloat(formData["Baseline value (SisPorto)"]) || 0;
+
+      const response = await axios.post(
+        "http://127.0.0.1:5000/predict/manual",
+        { baseline }
+      );
+
+      const prediction = response.data.prediction;
+      router.push(`/results?prediction=${prediction}`);
+    } catch (err) {
+      setError("Failed to get prediction. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#e5c6e4] p-6">
@@ -59,6 +77,8 @@ function ManualEntryPage() {
         <h2 className="text-2xl font-semibold text-center text-[#a14c9c] mb-4">
           Manual CTG Data Entry
         </h2>
+
+        {error && <p className="text-center text-red-600">{error}</p>}
 
         <form className="space-y-4">
           {ctgFields.map((field, index) => (
@@ -95,14 +115,14 @@ function ManualEntryPage() {
             <button
               type="button"
               className={`px-4 py-2 rounded text-white transition ${
-                isFormComplete
+                allFieldsFilled
                   ? "bg-[#a14c9c] hover:bg-[#7b387a]"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
               onClick={handleSubmit}
-              disabled={!isFormComplete}
+              disabled={!allFieldsFilled || loading}
             >
-              Submit
+              {loading ? "Processing..." : "Submit"}
             </button>
           </div>
         </form>

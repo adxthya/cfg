@@ -3,12 +3,6 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const getFetalHealthStatus = (baseline) => {
-  if (baseline < 100) return "Normal";
-  if (baseline >= 100 && baseline <= 200) return "Suspect";
-  return "Pathological";
-};
-
 const getStatusColor = (status) => {
   switch (status) {
     case "Normal":
@@ -25,18 +19,18 @@ const getStatusColor = (status) => {
 export default function ResultsClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [baselineValue, setBaselineValue] = useState(null);
+  const [prediction, setPrediction] = useState(null);
 
   useEffect(() => {
-    const baseline = parseFloat(searchParams.get("baseline") || "0");
-    setBaselineValue(baseline);
+    const predictedValue = searchParams.get("prediction");
+    if (predictedValue) {
+      setPrediction(predictedValue);
+    }
   }, [searchParams]);
 
-  if (baselineValue === null) {
+  if (!prediction) {
     return <p className="text-center text-gray-600">Loading...</p>;
   }
-
-  const fetalHealth = getFetalHealthStatus(baselineValue);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#e5c6e4] p-6">
@@ -60,10 +54,10 @@ export default function ResultsClient() {
           </h4>
           <div
             className={`inline-block px-6 py-2 mt-2 rounded-md text-lg font-semibold ${getStatusColor(
-              fetalHealth
+              prediction
             )}`}
           >
-            {fetalHealth}
+            {prediction}
           </div>
         </div>
 
